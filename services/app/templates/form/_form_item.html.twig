@@ -1,0 +1,20 @@
+{% set value = form.state[item.name] %}
+{% set error = form.errors[item.name] %}
+{% set classes = 'form-control' %}
+{% if error %}
+  {% set classes = classes ~ ' is-invalid' %}
+{% endif %}
+{% set required = item.isRequired ? ' required' : '' %}
+{% set disabled = item.isDisabled ? ' disabled' : '' %}
+{% set extra = item.extra ? item.extra : '' %}
+<div class="mb-3">
+  {% if item.label %}
+    <label for="form-{{ item.name }}" class="form-label">{{ item.label }}</label>
+  {% endif %}
+
+  <input type="{{ item.type }}" class="{{ classes }}" id="form-{{ item.name }}" name="{{ item.name }}"{% if value %} value="{{ value }}"{% endif %}{{ required }}{{ disabled }} {{ extra }}>
+
+  {% if error %}
+    <div class="invalid-feedback">{{ error }}</div>
+  {% endif %}
+</div>

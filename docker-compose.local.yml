@@ -1,0 +1,51 @@
+version: '3'
+
+services:
+  albatross-app:
+    build:
+      context: ./services/app
+      args:
+        ALBATROSS_BASE_PATH: $ALBATROSS_BASE_PATH
+    ports:
+      - '8001:80'
+    volumes:
+      - './services/app/public:/var/www/html/public'
+      - './services/app/src:/var/www/html/src'
+      - './services/app/templates:/var/www/html/templates'
+      - './services/app/php.local.ini:/usr/local/etc/php/php.ini'
+      - 'session-data:/tmp/session'
+    env_file: .env.local
+    restart: always
+
+  albatross-jobworker:
+    build:
+      context: ./services/app
+    volumes:
+      - './services/app/bin:/var/www/html/bin'
+      - './services/app/src:/var/www/html/src'
+      - './services/app/php.local.ini:/usr/local/etc/php/php.ini'
+    entrypoint: 'php bin/jobworker'
+    env_file: .env.local
+    restart: always
+
+  albatross-db:
+    image: postgres:16.0
+    expose:
+      - 5432
+    volumes:
+      - 'db-data:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_PASSWORD: $ALBATROSS_DB_PASSWORD
+    restart: always
+
+  albatross-sandbox-exec:
+    build:
+      context: ./services/sandbox-exec
+    expose:
+      - 8888
+    env_file: .env.local
+    restart: always
+
+volumes:
+  db-data:
+  session-data:

@@ -1,0 +1,34 @@
+{
+    "name": "nsfisis/albatross",
+    "license": "MIT License",
+    "autoload": {
+        "psr-4": {
+            "Nsfisis\\Albatross\\": "src/"
+        }
+    },
+    "require": {
+        "middlewares/php-session": "^3.1",
+        "php-di/slim-bridge": "^3.4",
+        "slim/csrf": "^1.3",
+        "slim/psr7": "^1.6",
+        "slim/slim": "^4.12",
+        "slim/twig-view": "^3.3"
+    },
+    "require-dev": {
+        "phpstan/phpstan": "^1.10",
+        "phpstan/phpstan-deprecation-rules": "^1.1",
+        "phpstan/phpstan-strict-rules": "^1.5",
+        "phpunit/phpunit": "^10.3",
+        "symplify/easy-coding-standard": "^12.0"
+    },
+    "config": {
+        "preferred-install": "dist",
+        "sort-packages": true
+    },
+    "scripts": {
+        "ecs": "ecs check",
+        "ecsfix": "ecs check --fix",
+        "phpstan": "phpstan analyse",
+        "phpunit": "phpunit tests"
+    }
+}

@@ -1,0 +1,38 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <h2>{{ quiz.title }}</h2>
+  <p>
+    {{ quiz.description }}
+  </p>
+  <h2>回答 #{{ answer.answer_number }}</h2>
+  <p>
+    {{ answer.author_name }} が {{ answer.submitted_at|date('Y-m-d H:i:s', 'Asia/Tokyo') }} に投稿
+  </p>
+  <h2>コード</h2>
+  <p>
+    {{ answer.code_size }} byte
+  </p>
+  <pre><code class="hljs language-php">{{ answer.code }}</code></pre>
+  <h2>実行結果</h2>
+  <div>
+    ステータス: <span class="js-aggregated-execution-status" data-answer-id="{{ answer.answer_id }}">{{ answer.execution_status.label() }}</span>
+    {% if answer.execution_status.showLoadingIndicator() %}
+      <div class="js-aggregated-execution-status-loading-indicator spinner-border text-primary spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>
+    {% endif %}
+  </div>
+  {% for ex in testcase_executions %}
+    <h3>テストケース {{ loop.index }}</h3>
+    <div>
+      ステータス: <span class="js-testcase-execution-status" data-testcase-execution-id="{{ ex.testcase_execution_id }}">{{ ex.status.label() }}</span>
+      {% if ex.status.showLoadingIndicator() %}
+        <div class="js-testcase-execution-status-loading-indicator spinner-border text-primary spinner-border-sm" role="status" data-testcase-execution-id="{{ ex.testcase_execution_id }}"><span class="visually-hidden">Loading...</span></div>
+      {% endif %}
+    </div>
+    <h4>標準出力</h4>
+    <pre><code class="js-testcase-execution-stdout hljs language-plaintext" data-testcase-execution-id="{{ ex.testcase_execution_id }}">{{ ex.stdout }}</code></pre>
+    <h4>標準エラー出力</h4>
+    <pre><code class="js-testcase-execution-stderr hljs language-plaintext" data-testcase-execution-id="{{ ex.testcase_execution_id }}">{{ ex.stderr }}</code></pre>
+  {% endfor %}
+  <script type="module" src="{{ base_path() }}/assets/loading.js"></script>
+{% endblock %}

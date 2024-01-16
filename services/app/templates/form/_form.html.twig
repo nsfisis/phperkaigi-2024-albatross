@@ -1,0 +1,24 @@
+<form method=POST{% if form.action %} action="{{ form.action }}"{% endif %} novalidate>
+  {% if form.errors.general %}
+    <div class="alert alert-danger">
+      {{ form.errors.general }}
+    </div>
+  {% endif %}
+
+  {% for item in form.items %}
+    {% if item.type == 'checkbox' %}
+      {{ include('form/_form_item_checkbox.html.twig') }}
+    {% elseif item.type == 'textarea' %}
+      {{ include('form/_form_item_textarea.html.twig') }}
+    {% else %}
+      {{ include('form/_form_item.html.twig') }}
+    {% endif %}
+  {% endfor %}
+
+  <div class="mb-3">
+    <input type="submit" class="btn btn-primary" value="{{ form.submit_label }}">
+  </div>
+
+  <input type="hidden" name="{{ csrf.name_key }}" value="{{ csrf.name }}">
+  <input type="hidden" name="{{ csrf.value_key }}" value="{{ csrf.value }}">
+</form>

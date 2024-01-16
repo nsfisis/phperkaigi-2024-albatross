@@ -1,0 +1,12 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <h2>{{ quiz.title }}</h2>
+  <p>
+    {{ quiz.description }}
+  </p>
+  <h3>実装例</h3>
+  <pre><code class="hljs language-php">{{ quiz.example_code }}</code></pre>
+  <h3>回答</h3>
+  {{ include('form/_form.html.twig') }}
+{% endblock %}

@@ -1,0 +1,21 @@
+{% set value = form.state[item.name] %}
+{% set error = form.errors[item.name] %}
+{% set classes = 'form-check-input' %}
+{% if error %}
+  {% set classes = classes ~ ' is-invalid' %}
+{% endif %}
+{% set required = item.isRequired ? ' required' : '' %}
+{% set disabled = item.isDisabled ? ' disabled' : '' %}
+{% set extra = item.extra ? item.extra : '' %}
+{% set extra = extra ~ (value == 'on' ? ' checked' : '') %}
+<div class="mb-3 form-check">
+  <input type="checkbox" class="{{ classes }}" id="form-{{ item.name }}" name="{{ item.name }}"{% if value %} value="{{ value }}"{% endif %}{{ required }}{{ disabled }} {{ extra }}>
+
+  {% if item.label %}
+    <label for="form-{{ item.name }}" class="form-check-label">{{ item.label }}</label>
+  {% endif %}
+
+  {% if error %}
+    <div class="invalid-feedback">{{ error }}</div>
+  {% endif %}
+</div>

@@ -1,0 +1,16 @@
+{
+  "name": "sandbox-exec",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "nsfisis",
+  "license": "MIT",
+  "dependencies": {
+    "@hono/node-server": "^1.2.0",
+    "hono": "^3.7.2"
+  }
+}

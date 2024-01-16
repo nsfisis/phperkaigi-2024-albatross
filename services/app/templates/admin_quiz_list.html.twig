@@ -1,0 +1,21 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <p>
+    このページは管理画面です。<a href="{{ url_for('quiz_list', { qslug: quiz.slug }) }}">通常の問題一覧はこちらを参照してください</a>
+  </p>
+  <ul>
+    {% for quiz in quizzes %}
+      <li>
+        <a href="{{ url_for('admin_quiz_edit', { qslug: quiz.slug }) }}">問題 #{{ quiz.quiz_id }}: {{ quiz.title }}</a>
+        <ul>
+          <li><a href="{{ url_for('admin_testcase_list', { qslug: quiz.slug }) }}">テストケース一覧</a></li>
+          <li><a href="{{ url_for('admin_answer_list', { qslug: quiz.slug }) }}">回答一覧</a></li>
+        </ul>
+      </li>
+    {% endfor %}
+  </ul>
+  <p>
+    <a href="{{ url_for('admin_quiz_new') }}">問題を作成する</a>
+  </p>
+{% endblock %}

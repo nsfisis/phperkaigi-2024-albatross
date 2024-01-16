@@ -1,0 +1,21 @@
+{
+  "name": "albatross",
+  "version": "0.1.0",
+  "main": "assets/index.js",
+  "type": "module",
+  "author": "nsfisis",
+  "license": "MIT",
+  "dependencies": {
+    "bootstrap": "5.3.2",
+    "chart.js": "^4.4.1",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^3.1.0",
+    "highlight.js": "11.8.0"
+  },
+  "devDependencies": {
+    "esbuild": "0.19.4"
+  },
+  "scripts": {
+    "build": "node esbuild.mjs"
+  }
+}

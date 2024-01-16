@@ -1,0 +1,6 @@
+FROM node:18.18.0-slim
+
+WORKDIR /app
+COPY package.json package-lock.json ./
+
+RUN npm install && mkdir -p /app/public/assets

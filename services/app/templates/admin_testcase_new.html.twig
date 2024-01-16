@@ -1,0 +1,12 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <p>
+    このページは管理画面です
+  </p>
+  {{ include('form/_form.html.twig') }}
+  <p>
+    テストケースを追加すると、この問題に対してすでに提出されている回答に対してもテストが実行されます。
+    その実行が終わるまで回答のステータスは Pending 状態になり、ランキング等にも出現しなくなります。
+  </p>
+{% endblock %}

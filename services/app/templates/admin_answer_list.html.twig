@@ -1,0 +1,41 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <p>
+    このページは管理画面です。<a href="{{ url_for('answer_list', { qslug: quiz.slug }) }}">通常の回答一覧はこちらを参照してください</a>
+  </p>
+  <h2>{{ quiz.title }}</h2>
+  <p>
+    {{ quiz.description }}
+  </p>
+  <h2>回答一覧</h2>
+  <form action="{{ url_for('admin_answer_rerun_all_answers_post', { qslug: quiz.slug }) }}" method=POST>
+    <input type="submit" class="btn btn-warning" value="すべての回答に対して全テストケースを再実行">
+    <input type="hidden" name="{{ csrf.name_key }}" value="{{ csrf.name }}">
+    <input type="hidden" name="{{ csrf.value_key }}" value="{{ csrf.value }}">
+  </form>
+  <table>
+    <thead>
+      <tr>
+        <th>ランク</th>
+        <th>ID</th>
+        <th>作者</th>
+        <th>サイズ</th>
+        <th>投稿日時</th>
+        <th>ステータス</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for answer in answers %}
+        <tr>
+          <td>{{ loop.index }}</td>
+          <td><a href="{{ url_for('admin_answer_edit', { qslug: quiz.slug, anum: answer.answer_number }) }}">#{{ answer.answer_number }}</a></td>
+          <td>{{ answer.author_name }}{% if answer.author_is_admin %} (staff){% endif %}</td>
+          <td>{{ answer.code_size }} byte</td>
+          <td>{{ answer.submitted_at|date('Y-m-d H:i:s', 'Asia/Tokyo') }}</td>
+          <td>{{ answer.execution_status.value }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

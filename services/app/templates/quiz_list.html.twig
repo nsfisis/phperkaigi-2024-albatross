@@ -1,0 +1,9 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <ul>
+    {% for quiz in quizzes %}
+      <li><a href="{{ url_for('quiz_view', { qslug: quiz.slug }) }}">問題 #{{ quiz.quiz_id }}: {{ quiz.title }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

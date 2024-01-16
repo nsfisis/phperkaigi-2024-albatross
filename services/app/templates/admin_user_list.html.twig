@@ -1,0 +1,14 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <p>
+    このページは管理画面です
+  </p>
+  <ul>
+    {% for user in users %}
+      <li>
+        <a href="{{ url_for('admin_user_edit', { username: user.username }) }}">{{ user.username }}</a>{% if user.is_admin %} (管理者){% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% endblock %}

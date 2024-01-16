@@ -1,0 +1,22 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <p>
+    このページは管理画面です
+  </p>
+  {{ include('form/_form.html.twig') }}
+  <p>
+    既存のテストケースを編集すると、この問題に対してすでに提出されている回答に対してもテストが再度実行されます。
+    その実行が終わるまで回答のステータスは Pending 状態になり、ランキング等にも出現しなくなります。
+  </p>
+
+  <form action="{{ url_for('admin_testcase_delete_post', { qslug: quiz.slug, tid: testcase.testcase_id }) }}" method=POST>
+    <input type="submit" class="btn btn-danger" value="削除">
+    <input type="hidden" name="{{ csrf.name_key }}" value="{{ csrf.name }}">
+    <input type="hidden" name="{{ csrf.value_key }}" value="{{ csrf.value }}">
+  </form>
+  <p>
+    既存のテストケースを削除すると、この問題に対してすでに提出されている回答のステータスは他のテストケースを基にして再計算されます。
+    再計算が終わるまで回答のステータスは Pending 状態になり、ランキング等にも出現しなくなります。
+  </p>
+{% endblock %}

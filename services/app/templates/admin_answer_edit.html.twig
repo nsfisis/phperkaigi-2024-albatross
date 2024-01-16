@@ -1,0 +1,44 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <p>
+    このページは管理画面です
+  </p>
+  <h2>{{ quiz.title }}</h2>
+  <p>
+    {{ quiz.description }}
+  </p>
+  <h2>回答 #{{ answer.answer_number }}</h2>
+  <p>
+    {{ answer.author_name }} が {{ answer.submitted_at|date('Y-m-d H:i:s', 'Asia/Tokyo') }} に投稿
+  </p>
+  <h2>コード</h2>
+  <p>
+    {{ answer.code_size }} byte
+  </p>
+  <pre><code class="hljs language-php">{{ answer.code }}</code></pre>
+  <h2>実行結果</h2>
+  <div>
+    ステータス: {{ answer.execution_status.label() }}
+    <form action="{{ url_for('admin_answer_rerun_all_testcases_post', { qslug: quiz.slug, anum: answer.answer_number }) }}" method=POST>
+      <input type="submit" class="btn btn-warning" value="すべてのテストケースを再実行">
+      <input type="hidden" name="{{ csrf.name_key }}" value="{{ csrf.name }}">
+      <input type="hidden" name="{{ csrf.value_key }}" value="{{ csrf.value }}">
+    </form>
+  </div>
+  {% for ex in testcase_executions %}
+    <h3>テストケース {{ loop.index }}</h3>
+    <div>
+      ステータス: {{ ex.status.label() }}
+    </div>
+    <form action="{{ url_for('admin_answer_rerun_single_testcase_post', { qslug: quiz.slug, anum: answer.answer_number, txid: ex.testcase_execution_id }) }}" method=POST>
+      <input type="submit" class="btn btn-warning" value="このテストケースを再実行">
+      <input type="hidden" name="{{ csrf.name_key }}" value="{{ csrf.name }}">
+      <input type="hidden" name="{{ csrf.value_key }}" value="{{ csrf.value }}">
+    </form>
+    <h4>標準出力</h4>
+    <pre><code class="hljs language-plaintext">{{ ex.stdout }}</code></pre>
+    <h4>標準エラー出力</h4>
+    <pre><code class="hljs language-plaintext">{{ ex.stderr }}</code></pre>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <h2>{{ quiz.title }}</h2>
+  <p>
+    {{ quiz.description }}
+  </p>
+  <h3>実装例</h3>
+  <pre><code class="hljs language-php">{{ quiz.example_code }}</code></pre>
+  {% if is_open %}
+    <p>
+      <a href="{{ url_for('answer_new', { qslug: quiz.slug }) }}">回答する</a>
+    </p>
+  {% endif %}
+  <h2>ランキング</h2>
+  {% if is_ranking_hidden %}
+    回答が締め切られるまで、ランキングは表示されません
+  {% elseif ranking|length == 0 %}
+    <p>
+      まだ正解した回答がありません
+    </p>
+  {% else %}
+    <table>
+      <thead>
+        <tr>
+          <th>ランク</th>
+          <th>ID</th>
+          <th>作者</th>
+          <th>サイズ</th>
+          <th>投稿日時</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for answer in ranking %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td><a href="{{ url_for('answer_view', { qslug: quiz.slug, anum: answer.answer_number }) }}">#{{ answer.answer_number }}</a></td>
+            <td>{{ answer.author_name }}{% if answer.author_is_admin %} (staff){% endif %}</td>
+            <td>{{ answer.code_size }} byte</td>
+            <td>{{ answer.submitted_at|date('Y-m-d H:i:s', 'Asia/Tokyo') }}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    <div>
+      <canvas id="chart" data-quiz-id="{{ quiz.quiz_id }}"></canvas>
+      <script type="module" src="{{ base_path() }}/assets/chart.js"></script>
+    </div>
+  {% endif %}
+  <p>
+    <a href="{{ url_for('answer_list', { qslug: quiz.slug }) }}">すべての回答を見る</a>
+  </p>
+{% endblock %}
