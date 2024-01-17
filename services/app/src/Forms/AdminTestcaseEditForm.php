@@ -63,14 +63,14 @@ final class AdminTestcaseEditForm extends FormBase
                 name: 'input',
                 type: 'textarea',
                 label: '標準入力',
-                extra: 'rows="10" cols="80"',
+                extra: 'rows=10 cols=80',
             ),
             new FormItem(
                 name: 'expected_result',
                 type: 'textarea',
                 label: '期待する出力',
                 isRequired: true,
-                extra: 'rows="10" cols="80"',
+                extra: 'rows=10 cols=80',
             ),
         ];
     }

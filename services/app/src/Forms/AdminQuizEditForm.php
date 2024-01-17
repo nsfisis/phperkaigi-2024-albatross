@@ -77,14 +77,14 @@ final class AdminQuizEditForm extends FormBase
                 type: 'textarea',
                 label: '説明',
                 isRequired: true,
-                extra: 'rows="3" cols="80"',
+                extra: 'rows=3 cols=80',
             ),
             new FormItem(
                 name: 'example_code',
                 type: 'textarea',
                 label: '実装例',
                 isRequired: true,
-                extra: 'rows="10" cols="80"',
+                extra: 'rows=10 cols=80',
             ),
             new FormItem(
                 name: 'birdie_code_size',

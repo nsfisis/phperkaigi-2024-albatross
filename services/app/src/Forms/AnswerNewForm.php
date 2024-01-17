@@ -67,7 +67,7 @@ final class AnswerNewForm extends FormBase
                 type: 'textarea',
                 label: 'コード',
                 isRequired: true,
-                extra: 'rows="3" cols="80"',
+                extra: 'rows=3 cols=80',
             ),
         ];
     }
