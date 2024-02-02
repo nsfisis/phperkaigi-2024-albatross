@@ -7,7 +7,7 @@ services:
       args:
         ALBATROSS_BASE_PATH: $ALBATROSS_BASE_PATH
     ports:
-      - '8001:80'
+      - '127.0.0.1:8001:80'
     volumes:
       - './services/app/public:/var/www/html/public'
       - './services/app/src:/var/www/html/src'
