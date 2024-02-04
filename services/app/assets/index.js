@@ -10,4 +10,4 @@ document.addEventListener('DOMContentLoaded', () => {
   hljs.highlightAll();
 });
 
-console.log(`#Albatross!`);
+console.log(`#Hooray!Albatross!`);
