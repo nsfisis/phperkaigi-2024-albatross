@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(response => response.json())
       .then(({ aggregated_status, testcase_executions, phper_token }) => {
         if (phper_token) {
-          phperTokenElem.textContent = `バーディー！ ${phper_token}`;
+          phperTokenElem.innerHTML = `<div class="alert alert-success">バーディー！ ${phper_token}</div>`;
         }
 
         for (const ex of testcase_executions) {

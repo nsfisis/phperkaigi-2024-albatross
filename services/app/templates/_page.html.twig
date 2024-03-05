@@ -10,15 +10,15 @@
   <body>
     <header class="container">
       <nav class="navbar">
-        <a href="{{ url_for('quiz_list') }}" class="navbar-brand">{{ site_name }}</a>
+        <a class="navbar-brand" href="{{ url_for('quiz_list') }}">{{ site_name }}</a>
       </nav>
     </header>
-    <main class="container">
-      <h1>{{ page_title }}</h1>
+    <main class="container mt-5">
+      <h1 class="mb-4">{{ page_title }}</h1>
       {% block content %}{% endblock %}
     </main>
-    <footer class="container">
-      {{ site_name }}
+    <footer class="container text-center mt-5 mb-4">
+      {{ site_name }} - PHPerKaigi 2024
     </footer>
   </body>
 </html>

@@ -296,6 +296,7 @@ final class App
             'quiz' => $quiz,
             'answers' => $answers,
             'is_ranking_hidden' => $quiz->isRankingHidden(),
+            'is_open' => $quiz->isOpenToAnswer(),
         ]);
     }
 

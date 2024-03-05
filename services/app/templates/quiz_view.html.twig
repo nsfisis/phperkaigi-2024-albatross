@@ -12,13 +12,13 @@
   <p>
     {{ quiz.description }}
   </p>
-  <h3>実装例</h3>
-  <pre><code class="hljs language-php">{{ quiz.example_code }}</code></pre>
   {% if is_open %}
     <p>
-      <a href="{{ url_for('answer_new', { qslug: quiz.slug }) }}">回答する</a>
+      <a class="btn btn-primary" href="{{ url_for('answer_new', { qslug: quiz.slug }) }}">回答する</a>
     </p>
   {% endif %}
+  <h3>実装例</h3>
+  <pre><code class="hljs language-php">{{ quiz.example_code }}</code></pre>
   <h2>ランキング</h2>
   {% if is_ranking_hidden %}
     回答が締め切られるまで、ランキングは表示されません
@@ -27,7 +27,7 @@
       まだ正解した回答がありません
     </p>
   {% else %}
-    <table>
+    <table class="table table-striped table-bordered">
       <thead>
         <tr>
           <th>ランク</th>

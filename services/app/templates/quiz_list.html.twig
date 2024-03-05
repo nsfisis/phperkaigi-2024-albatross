@@ -1,9 +1,11 @@
 {% extends '_page.html.twig' %}
 
 {% block content %}
-  <ul>
-    {% for quiz in quizzes %}
-      <li><a href="{{ url_for('quiz_view', { qslug: quiz.slug }) }}">問題 #{{ quiz.quiz_id }}: {{ quiz.title }}</a></li>
-    {% endfor %}
-  </ul>
+  {% for quiz in quizzes %}
+    <a class="card mb-3 text-dark text-decoration-none" href="{{ url_for('quiz_view', { qslug: quiz.slug }) }}">
+      <div class="card-body">
+        <h5 class="card-title">問題 #{{ quiz.quiz_id }}: {{ quiz.title }}</span>
+      </div>
+    </a>
+  {% endfor %}
 {% endblock %}

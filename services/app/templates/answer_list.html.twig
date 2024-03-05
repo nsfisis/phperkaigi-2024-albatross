@@ -13,13 +13,18 @@
   <p>
     {{ quiz.description }}
   </p>
+  {% if is_open %}
+    <p>
+      <a class="btn btn-primary" href="{{ url_for('answer_new', { qslug: quiz.slug }) }}">回答する</a>
+    </p>
+  {% endif %}
   <h2>回答一覧</h2>
   {% if answers|length == 0 %}
     <p>
       まだ回答がありません
     </p>
   {% else %}
-    <table>
+    <table class="table table-striped table-bordered">
       <thead>
         <tr>
           <th>ランク</th>
