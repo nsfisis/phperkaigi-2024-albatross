@@ -892,8 +892,6 @@ final class App
                     'label' => $ex->status->label(),
                     'show_loading_indicator' => $ex->status->showLoadingIndicator(),
                 ],
-                'stdout' => $ex->stdout,
-                'stderr' => $ex->stderr,
             ], $testcaseExecutions),
         ])->withStatus(200);
     }

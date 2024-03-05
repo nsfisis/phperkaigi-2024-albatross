@@ -9,8 +9,6 @@ document.addEventListener('DOMContentLoaded', () => {
   );
   const statusElemsMap = getElemsMap('js-testcase-execution-status');
   const statusLoadingIndicatorElemsMap = getElemsMap('js-testcase-execution-status-loading-indicator');
-  const stdoutElemsMap = getElemsMap('js-testcase-execution-stdout');
-  const stderrElemsMap = getElemsMap('js-testcase-execution-stderr');
 
   if (!aggregatedStatusLoadingIndicatorElem) {
     return;
@@ -26,16 +24,12 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const ex of testcase_executions) {
           const statusElem = statusElemsMap.get(ex.id);
           const loadingIndicatorElem = statusLoadingIndicatorElemsMap.get(ex.id);
-          const stdoutElem = stdoutElemsMap.get(ex.id);
-          const stderrElem = stderrElemsMap.get(ex.id);
 
-          const { status, stdout, stderr } = ex;
+          const { status } = ex;
           if (status.label === statusElem.textContent) {
             continue;
           }
           statusElem.textContent = status.label;
-          stdoutElem.textContent = stdout;
-          stderrElem.textContent = stderr;
           if (loadingIndicatorElem && !status.show_loading_indicator) {
             loadingIndicatorElem.remove();
           }

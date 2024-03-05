@@ -84,7 +84,7 @@ final class LoginForm extends FormBase
                 try {
                     $user_id = $this->userRepo->create(
                         $username,
-                        is_admin: true, // TODO
+                        is_admin: false,
                     );
                 } catch (EntityValidationException $e) {
                     $this->state->setErrors($e->toFormErrors());
