@@ -15,6 +15,11 @@
   </p>
   <pre><code class="hljs language-php">{{ answer.code }}</code></pre>
   <h2>実行結果</h2>
+  <div class="js-phper-token">
+    {% if phper_token %}
+      バーディー！ {{ phper_token }}
+    {% endif %}
+  </div>
   <div>
     ステータス: <span class="js-aggregated-execution-status" data-answer-id="{{ answer.answer_id }}">{{ answer.execution_status.label() }}</span>
     {% if answer.execution_status.showLoadingIndicator() %}

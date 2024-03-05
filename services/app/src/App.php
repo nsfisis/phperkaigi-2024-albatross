@@ -26,6 +26,9 @@ use Nsfisis\Albatross\Middlewares\CacheControlPrivateMiddleware;
 use Nsfisis\Albatross\Middlewares\CurrentUserMiddleware;
 use Nsfisis\Albatross\Middlewares\TrailingSlash;
 use Nsfisis\Albatross\Middlewares\TwigMiddleware;
+use Nsfisis\Albatross\Models\AggregatedExecutionStatus;
+use Nsfisis\Albatross\Models\Answer;
+use Nsfisis\Albatross\Models\Quiz;
 use Nsfisis\Albatross\Models\User;
 use Nsfisis\Albatross\Repositories\AnswerRepository;
 use Nsfisis\Albatross\Repositories\QuizRepository;
@@ -385,11 +388,16 @@ final class App
             throw new HttpForbiddenException($request);
         }
 
+        if ($currentUser !== null) {
+            $phper_token = $this->obtainPhperToken($quiz, $answer, $currentUser);
+        }
+
         return $this->render($request, $response, 'answer_view.html.twig', [
             'page_title' => "問題 #{$quiz->quiz_id} - 回答 #{$answer->answer_number}",
             'quiz' => $quiz,
             'answer' => $answer,
             'testcase_executions' => $testcaseExecutionRepo->listByAnswerId($answer->answer_id),
+            'phper_token' => $phper_token ?? null,
         ]);
     }
 
@@ -881,6 +889,8 @@ final class App
 
         $testcaseExecutions = $testcaseExecutionRepo->listByAnswerId($answer->answer_id);
 
+        $phper_token = $this->obtainPhperToken($quiz, $answer, $currentUser);
+
         return $this->makeJsonResponse($response, [
             'aggregated_status' => [
                 'label' => $answer->execution_status->label(),
@@ -893,6 +903,7 @@ final class App
                     'show_loading_indicator' => $ex->status->showLoadingIndicator(),
                 ],
             ], $testcaseExecutions),
+            'phper_token' => $phper_token,
         ])->withStatus(200);
     }
 
@@ -942,6 +953,23 @@ final class App
         ])
             ->withHeader('Cache-Control', 'max-age=10')
             ->withStatus(200);
+    }
+
+    private function obtainPhperToken(Quiz $quiz, Answer $answer, User $currentUser): ?string
+    {
+        if ($answer->author_id !== $currentUser->user_id) {
+            return null;
+        }
+        if ($answer->execution_status !== AggregatedExecutionStatus::OK) {
+            return null;
+        }
+        if ($quiz->birdie_code_size === null) {
+            return null;
+        }
+        if ($answer->code_size > $quiz->birdie_code_size) {
+            return null;
+        }
+        return '#albatros-' . md5('KORE-HA-TEKITO-NA-SORUTO-DESU' . $quiz->slug);
     }
 
     private function makeJsonResponse(ResponseInterface $response, mixed $data): ResponseInterface

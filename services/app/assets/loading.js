@@ -1,4 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const phperTokenElem = document.getElementsByClassName('js-phper-token')[0];
+
   const aggregatedStatusElem = document.getElementsByClassName('js-aggregated-execution-status')[0];
   const aggregatedStatusLoadingIndicatorElem = document.getElementsByClassName('js-aggregated-execution-status-loading-indicator')[0];
   const answerId = aggregatedStatusElem.dataset.answerId;
@@ -20,7 +22,11 @@ document.addEventListener('DOMContentLoaded', () => {
   timerId = setInterval(() => {
     fetch(apiUrl)
       .then(response => response.json())
-      .then(({ aggregated_status, testcase_executions }) => {
+      .then(({ aggregated_status, testcase_executions, phper_token }) => {
+        if (phper_token) {
+          phperTokenElem.textContent = `バーディー！ ${phper_token}`;
+        }
+
         for (const ex of testcase_executions) {
           const statusElem = statusElemsMap.get(ex.id);
           const loadingIndicatorElem = statusLoadingIndicatorElemsMap.get(ex.id);
