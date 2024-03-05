@@ -29,6 +29,10 @@
         "ecs": "ecs check",
         "ecsfix": "ecs check --fix",
         "phpstan": "phpstan analyse",
-        "phpunit": "phpunit tests"
+        "phpunit": "phpunit tests",
+        "check": [
+            "@ecs",
+            "@phpstan"
+        ]
     }
 }
