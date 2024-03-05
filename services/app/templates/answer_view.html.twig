@@ -21,14 +21,18 @@
       <div class="js-aggregated-execution-status-loading-indicator spinner-border text-primary spinner-border-sm" role="status"><span class="visually-hidden">Loading...</span></div>
     {% endif %}
   </div>
-  {% for ex in testcase_executions %}
-    <h3>テストケース {{ loop.index }}</h3>
-    <div>
-      ステータス: <span class="js-testcase-execution-status" data-testcase-execution-id="{{ ex.testcase_execution_id }}">{{ ex.status.label() }}</span>
-      {% if ex.status.showLoadingIndicator() %}
-        <div class="js-testcase-execution-status-loading-indicator spinner-border text-primary spinner-border-sm" role="status" data-testcase-execution-id="{{ ex.testcase_execution_id }}"><span class="visually-hidden">Loading...</span></div>
-      {% endif %}
-    </div>
-  {% endfor %}
+  <table>
+    {% for ex in testcase_executions %}
+      <tr>
+        <td>テストケース {{ loop.index }}</td>
+        <td>
+          ステータス: <span class="js-testcase-execution-status" data-testcase-execution-id="{{ ex.testcase_execution_id }}">{{ ex.status.label() }}</span>
+          {% if ex.status.showLoadingIndicator() %}
+            <span class="js-testcase-execution-status-loading-indicator spinner-border text-primary spinner-border-sm" role="status" data-testcase-execution-id="{{ ex.testcase_execution_id }}"><span class="visually-hidden">Loading...</span></span>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
   <script type="module" src="{{ base_path() }}/assets/loading.js"></script>
 {% endblock %}
