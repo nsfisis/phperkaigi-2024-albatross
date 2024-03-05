@@ -41,6 +41,8 @@ logs:
 build-assets: services/app/public/assets
 	docker build -t albatross-build-assets -f services/app/Dockerfile.frontend ./services/app
 	docker run --rm -v "$$(pwd)"/services/app/esbuild.mjs:/app/esbuild.mjs -v "$$(pwd)"/services/app/assets:/app/assets -v "$$(pwd)"/services/app/public/assets:/app/public/assets --env-file "$$(pwd)"/.env.local albatross-build-assets npm run build
+	rm -f services/app/public/assets/favicon.svg
+	cp services/app/assets/favicon.svg services/app/public/assets
 
 services/app/public/assets:
 	@mkdir -p services/app/public/assets
