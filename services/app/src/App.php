@@ -260,12 +260,14 @@ final class App
             $ranking = $answerRepo->getRanking($quiz->quiz_id, upto: 20);
         }
 
+        $currentUser = $this->getCurrentUser($request);
         return $this->render($request, $response, 'quiz_view.html.twig', [
             'page_title' => "問題 #{$quiz->quiz_id}",
             'quiz' => $quiz,
             'ranking' => $ranking,
             'is_ranking_hidden' => $quiz->isRankingHidden(),
             'is_open' => $quiz->isOpenToAnswer(),
+            'current_user_id' => $currentUser?->user_id,
         ]);
     }
 
@@ -297,6 +299,7 @@ final class App
             'answers' => $answers,
             'is_ranking_hidden' => $quiz->isRankingHidden(),
             'is_open' => $quiz->isOpenToAnswer(),
+            'current_user_id' => isset($currentUser) ? $currentUser->user_id : null,
         ]);
     }
 

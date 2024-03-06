@@ -41,7 +41,13 @@
         {% for answer in ranking %}
           <tr>
             <td>{{ loop.index }}</td>
-            <td><a href="{{ url_for('answer_view', { qslug: quiz.slug, anum: answer.answer_number }) }}">#{{ answer.answer_number }}</a></td>
+            <td>
+              {% if quiz.isOpenToAnswer() and answer.author_id != current_user_id %}
+                #{{ answer.answer_number }}
+              {% else %}
+                <a href="{{ url_for('answer_view', { qslug: quiz.slug, anum: answer.answer_number }) }}">#{{ answer.answer_number }}</a>
+              {% endif %}
+            </td>
             <td>{{ answer.author_name }}{% if answer.author_is_admin %} (staff){% endif %}</td>
             <td>{{ answer.code_size }} byte</td>
             <td>{{ answer.submitted_at|date('Y-m-d H:i:s', 'Asia/Tokyo') }}</td>
