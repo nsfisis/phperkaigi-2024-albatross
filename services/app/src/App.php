@@ -227,7 +227,7 @@ final class App
         ResponseInterface $response,
         QuizRepository $quizRepo,
     ): ResponseInterface {
-        $quizzes = $quizRepo->listStarted();
+        $quizzes = $quizRepo->listAll();
 
         return $this->render($request, $response, 'quiz_list.html.twig', [
             'page_title' => '問題一覧',
@@ -251,7 +251,7 @@ final class App
         AnswerRepository $answerRepo,
     ): ResponseInterface {
         $quiz = $quizRepo->findBySlug($qslug);
-        if ($quiz === null || !$quiz->isStarted()) {
+        if ($quiz === null) {
             throw new HttpNotFoundException($request);
         }
         if ($quiz->isRankingHidden()) {
@@ -277,7 +277,7 @@ final class App
         AnswerRepository $answerRepo,
     ): ResponseInterface {
         $quiz = $quizRepo->findBySlug($qslug);
-        if ($quiz === null || !$quiz->isStarted()) {
+        if ($quiz === null) {
             throw new HttpNotFoundException($request);
         }
         if ($quiz->isRankingHidden()) {
@@ -377,7 +377,7 @@ final class App
     ): ResponseInterface {
         $anum = (int)$anum;
         $quiz = $quizRepo->findBySlug($qslug);
-        if ($quiz === null || !$quiz->isStarted()) {
+        if ($quiz === null) {
             throw new HttpNotFoundException($request);
         }
         $answer = $answerRepo->findByQuizIdAndAnswerNumber($quiz->quiz_id, answer_number: $anum);
@@ -917,7 +917,7 @@ final class App
     ): ResponseInterface {
         $qid = (int)$qid;
         $quiz = $quizRepo->findById($qid);
-        if ($quiz === null || !$quiz->isStarted()) {
+        if ($quiz === null) {
             return $this->makeJsonResponse($response, [
                 'error' => 'not_found',
             ])->withStatus(404);
