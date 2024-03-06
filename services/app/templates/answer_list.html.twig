@@ -46,7 +46,7 @@
               {% endif %}
             </td>
             <td>
-              {% if quiz.isOpenToAnswer() and answer.author_id != current_user_id %}
+              {% if not quiz.isFinished() and answer.author_id != current_user_id %}
                 #{{ answer.answer_number }}
               {% else %}
                 <a href="{{ url_for('answer_view', { qslug: quiz.slug, anum: answer.answer_number }) }}">#{{ answer.answer_number }}</a>

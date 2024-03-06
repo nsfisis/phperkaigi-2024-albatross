@@ -388,7 +388,7 @@ final class App
             throw new HttpNotFoundException($request);
         }
         $currentUser = $this->getCurrentUser($request);
-        if ($quiz->isOpenToAnswer() && $answer->author_id !== $currentUser?->user_id) {
+        if (!$quiz->isFinished() && $answer->author_id !== $currentUser?->user_id) {
             throw new HttpForbiddenException($request);
         }
 
@@ -887,7 +887,7 @@ final class App
         if ($quiz === null) {
             throw new HttpNotFoundException($request);
         }
-        if ($quiz->isOpenToAnswer() && $answer->author_id !== $currentUser->user_id) {
+        if (!$quiz->isFinished() && $answer->author_id !== $currentUser->user_id) {
             throw new HttpForbiddenException($request);
         }
 
