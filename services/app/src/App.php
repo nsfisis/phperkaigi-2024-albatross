@@ -590,7 +590,6 @@ final class App
         if ($answer === null) {
             throw new HttpNotFoundException($request);
         }
-        $answerRepo->markAsPending($answer->answer_id);
         $testcaseExecutions = $testcaseExecutionRepo->listByAnswerId($answer->answer_id);
 
         return $this->render($request, $response, 'admin_answer_edit.html.twig', [
