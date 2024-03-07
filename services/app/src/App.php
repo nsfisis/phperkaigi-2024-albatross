@@ -282,8 +282,8 @@ final class App
         if ($quiz === null) {
             throw new HttpNotFoundException($request);
         }
+        $currentUser = $this->getCurrentUser($request);
         if ($quiz->isRankingHidden()) {
-            $currentUser = $this->getCurrentUser($request);
             if ($currentUser === null) {
                 $answers = [];
             } else {
@@ -299,7 +299,7 @@ final class App
             'answers' => $answers,
             'is_ranking_hidden' => $quiz->isRankingHidden(),
             'is_open' => $quiz->isOpenToAnswer(),
-            'current_user_id' => isset($currentUser) ? $currentUser->user_id : null,
+            'current_user_id' => $currentUser?->user_id,
         ]);
     }
 
