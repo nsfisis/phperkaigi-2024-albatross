@@ -934,9 +934,6 @@ final class App
 
         $stats = [];
         foreach ($correctAnswers as $answer) {
-            if ($answer->submitted_at < $quiz->started_at) {
-                continue;
-            }
             if (!isset($stats[$answer->author_id])) {
                 $stats[$answer->author_id]['user'] = [
                     'name' => $answer->author_name,
