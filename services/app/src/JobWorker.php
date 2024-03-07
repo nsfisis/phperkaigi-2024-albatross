@@ -93,7 +93,7 @@ final class JobWorker
 
         $pendingOrRunningCount = 0;
         $acCount = 0;
-        foreach ($statuses as $ex_id => $status) {
+        foreach ($statuses as $status) {
             match ($status) {
                 ExecutionStatus::AC => $acCount++,
                 ExecutionStatus::Pending, ExecutionStatus::Running => $pendingOrRunningCount++,
