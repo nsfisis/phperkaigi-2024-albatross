@@ -91,19 +91,19 @@ final class JobWorker
             $statuses[$updatedExId] = $newStatus;
         }
 
-        $pending_or_running_count = 0;
-        $ac_count = 0;
+        $pendingOrRunningCount = 0;
+        $acCount = 0;
         foreach ($statuses as $ex_id => $status) {
             match ($status) {
-                ExecutionStatus::AC => $ac_count++,
-                ExecutionStatus::Pending, ExecutionStatus::Running => $pending_or_running_count++,
+                ExecutionStatus::AC => $acCount++,
+                ExecutionStatus::Pending, ExecutionStatus::Running => $pendingOrRunningCount++,
                 default => null,
             };
         }
 
         $aggregatedStatus = match (true) {
-            $ac_count === count($statuses) => AggregatedExecutionStatus::OK,
-            $pending_or_running_count !== 0 => AggregatedExecutionStatus::Pending,
+            $acCount === count($statuses) => AggregatedExecutionStatus::OK,
+            $pendingOrRunningCount !== 0 => AggregatedExecutionStatus::Pending,
             default => AggregatedExecutionStatus::Failed,
         };
         $this->answerRepo->updateExecutionStatus($answer->answer_id, $aggregatedStatus);
