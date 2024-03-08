@@ -38,14 +38,17 @@ final class AnswerRepository
     /**
      * @return Answer[]
      */
-    public function listByQuizId(int $quiz_id): array
+    public function listByQuizId(int $quiz_id, bool $show_admin = false): array
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields([...self::ANSWER_FIELDS, ...self::ANSWER_JOIN_USER_FIELDS])
-            ->where('quiz_id = :quiz_id')
+            ->where(
+                'quiz_id = :quiz_id'
+                . ($show_admin ? '' : ' AND users.is_admin = FALSE')
+            )
             ->orderBy([['execution_status', 'DESC'], ['code_size', 'ASC'], ['submitted_at', 'ASC']])
             ->execute(['quiz_id' => $quiz_id]);
         return array_map($this->mapRawRowToAnswer(...), $result);
@@ -97,14 +100,17 @@ final class AnswerRepository
      * @param positive-int $upto
      * @return Answer[]
      */
-    public function getRanking(int $quiz_id, int $upto): array
+    public function getRanking(int $quiz_id, int $upto, bool $show_admin = false): array
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields([...self::ANSWER_FIELDS, ...self::ANSWER_JOIN_USER_FIELDS])
-            ->where('quiz_id = :quiz_id AND execution_status = :execution_status')
+            ->where(
+                'quiz_id = :quiz_id AND execution_status = :execution_status'
+                . ($show_admin ? '' : ' AND users.is_admin = FALSE')
+            )
             ->orderBy([['code_size', 'ASC'], ['submitted_at', 'ASC']])
             ->limit($upto)
             ->execute(['quiz_id' => $quiz_id, 'execution_status' => AggregatedExecutionStatus::OK->toInt()]);
@@ -114,14 +120,17 @@ final class AnswerRepository
     /**
      * @return Answer[]
      */
-    public function listAllCorrectAnswers(int $quiz_id): array
+    public function listAllCorrectAnswers(int $quiz_id, bool $show_admin = false): array
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields([...self::ANSWER_FIELDS, ...self::ANSWER_JOIN_USER_FIELDS])
-            ->where('quiz_id = :quiz_id AND execution_status = :execution_status')
+            ->where(
+                'quiz_id = :quiz_id AND execution_status = :execution_status'
+                . ($show_admin ? '' : ' AND users.is_admin = FALSE')
+            )
             ->orderBy([['submitted_at', 'ASC']])
             ->execute(['quiz_id' => $quiz_id, 'execution_status' => AggregatedExecutionStatus::OK->toInt()]);
         return array_map($this->mapRawRowToAnswer(...), $result);

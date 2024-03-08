@@ -563,7 +563,7 @@ final class App
         if ($quiz === null) {
             throw new HttpNotFoundException($request);
         }
-        $answers = $answerRepo->listByQuizId($quiz->quiz_id);
+        $answers = $answerRepo->listByQuizId($quiz->quiz_id, show_admin: true);
 
         return $this->render($request, $response, 'admin_answer_list.html.twig', [
             'page_title' => "管理画面 - 問題 #{$quiz->quiz_id} - 回答一覧",
