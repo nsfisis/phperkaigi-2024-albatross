@@ -24,6 +24,11 @@
       まだ回答がありません
     </p>
   {% else %}
+    {% if is_ranking_hidden %}
+      <p>
+        回答が締め切られるまで、自分以外の回答や回答のランクは表示されません
+      </p>
+    {% endif %}
     <table class="table table-striped table-bordered">
       <thead>
         <tr>
