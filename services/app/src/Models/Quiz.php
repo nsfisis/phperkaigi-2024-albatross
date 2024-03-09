@@ -55,7 +55,8 @@ final class Quiz
         if ($now === null) {
             $now = new DateTimeImmutable('now', new DateTimeZone('UTC'));
         }
-        return $this->ranking_hidden_at <= $now && !$this->isFinished($now);
+        $rankingShownAgainAt = $this->finished_at->modify('+90 minutes');
+        return $this->ranking_hidden_at <= $now && $now < $rankingShownAgainAt;
     }
 
     public static function create(
