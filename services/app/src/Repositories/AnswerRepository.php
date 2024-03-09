@@ -147,6 +147,7 @@ final class AnswerRepository
             ])
             ->where('r = 1')
             ->orderBy([['code_size', 'ASC'], ['submitted_at', 'ASC']])
+            ->limit($upto)
             ->execute(['quiz_id' => $quiz_id, 'execution_status' => AggregatedExecutionStatus::OK->toInt()]);
         return array_map($this->mapRawRowToAnswer(...), $result);
     }
