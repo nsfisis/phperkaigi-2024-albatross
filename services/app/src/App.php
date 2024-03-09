@@ -142,6 +142,8 @@ final class App
                     });
                 });
             });
+
+            $group->get('/stats/', $this->handleAdminStats(...))->setName('admin_stats');
         })
         ->add(AdminRequiredMiddleware::create($app))
         ->add(AuthRequiredMiddleware::create($app, 'login'));
@@ -863,6 +865,33 @@ final class App
         });
 
         return $this->makeRedirectResponse($response, $routeParser->urlFor('admin_testcase_list', ['qslug' => $qslug]));
+    }
+
+    private function handleAdminStats(
+        ServerRequestInterface $request,
+        ResponseInterface $response,
+        QuizRepository $quizRepo,
+        AnswerRepository $answerRepo,
+    ): ResponseInterface {
+        $quizzes = $quizRepo->listAll();
+        $rankings = [];
+        $best_codes = [];
+        foreach ($quizzes as $quiz) {
+            $rankings[] = $answerRepo->getRankingByBestScores($quiz->quiz_id, upto: 3);
+            $best_codes[] = $answerRepo->getBestCode($quiz->quiz_id) ?? '<no answers>';
+        }
+
+        $n_attendees = $answerRepo->countUniqueAuthors();
+        $n_answers = $answerRepo->countAll();
+
+        return $this->render($request, $response, 'admin_stats.html.twig', [
+            'page_title' => '管理画面 - 各種統計',
+            'n_attendees' => $n_attendees,
+            'n_answers' => $n_answers,
+            'quizzes' => $quizzes,
+            'rankings' => $rankings,
+            'best_codes' => $best_codes,
+        ]);
     }
 
     private function handleApiAnswerStatuses(

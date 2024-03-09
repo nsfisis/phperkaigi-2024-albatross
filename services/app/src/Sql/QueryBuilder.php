@@ -27,7 +27,7 @@ final class QueryBuilder
     ) {
     }
 
-    public function select(string $table): Select
+    public function select(string|Select $table): Select
     {
         return new Select($this, $table);
     }
@@ -53,6 +53,11 @@ final class QueryBuilder
     }
 
     public function schema(string $sql): void
+    {
+        $this->conn->exec($sql);
+    }
+
+    public function raw(string $sql): void
     {
         $this->conn->exec($sql);
     }
@@ -87,7 +92,11 @@ final class QueryBuilder
 
         return "SELECT " .
             implode(', ', $fields) .
-            " FROM $table" .
+            (
+                $table instanceof Select
+                    ? " FROM (" . $this->compileSelect($table) . ")"
+                    : " FROM $table"
+            ) .
             ($join !== null ? " $join->type $join->table ON $join->on" : '') .
             ($where !== '' ? " WHERE $where" : '') .
             (

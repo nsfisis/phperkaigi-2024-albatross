@@ -33,7 +33,7 @@ final class Select
 
     public function __construct(
         private readonly QueryBuilder $sql,
-        private readonly string $table,
+        private readonly string|Select $table,
     ) {
     }
 
@@ -94,7 +94,7 @@ final class Select
     /**
      * @internal
      */
-    public function _getTable(): string
+    public function _getTable(): string|Select
     {
         return $this->table;
     }

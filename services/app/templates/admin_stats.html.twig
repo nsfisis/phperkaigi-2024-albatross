@@ -1,0 +1,34 @@
+{% extends '_page.html.twig' %}
+
+{% block content %}
+  <p>
+    このページは管理画面です
+  </p>
+  <h2>統計</h2>
+  <ul>
+    <li>参加者数: {{ n_attendees }} 名</li>
+    <li>回答数: {{ n_answers }}</li>
+    <li>好成績者
+      <ul>
+        {% for quiz in quizzes %}
+          <li>第{{ loop.index }}問: {{ quiz.title }}
+            <ul>
+              {% for answer in rankings[loop.index - 1] %}
+                <li>{{ loop.index }}位: {{ answer.author_name }} ({{ answer.code_size }} byte)</li>
+              {% endfor %}
+            </ul>
+          </li>
+        {% endfor %}
+      </ul>
+    </li>
+  </ul>
+  <h2>問題</h2>
+  {% for quiz in quizzes %}
+    <h3>第{{ loop.index }}問: {{ quiz.title }}</h3>
+    <p>
+      {{ quiz.description }}
+    </p>
+    <h4>最短解</h4>
+    <pre><code class="hljs language-php">{{ best_codes[loop.index - 1] }}</code></pre>
+  {% endfor %}
+{% endblock %}
