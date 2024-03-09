@@ -21,7 +21,9 @@
   <pre><code class="hljs language-php">{{ quiz.example_code }}</code></pre>
   <h2>ランキング</h2>
   {% if is_ranking_hidden %}
-    回答が締め切られるまで、ランキングは表示されません
+    <p>
+      回答が締め切られるまで、ランキングは表示されません
+    </p>
   {% elseif ranking|length == 0 %}
     <p>
       まだ正解した回答がありません
