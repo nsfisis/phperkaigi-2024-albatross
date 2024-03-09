@@ -20,9 +20,18 @@
   {% endif %}
   <h2>回答一覧</h2>
   {% if answers|length == 0 %}
-    <p>
-      まだ回答がありません
-    </p>
+    {% if is_ranking_hidden %}
+      <p>
+        回答が締め切られるまで、回答一覧は表示されません
+      </p>
+      <p>
+        参加者の方で、ご自身の回答を確認する場合は、<a href="{{ url_for('login', {}, { to: url_for('answer_list', { qslug: quiz.slug }) }) }}">こちらからログインしてください</a>
+      </p>
+    {% else %}
+      <p>
+        まだ回答がありません
+      </p>
+    {% endif %}
   {% else %}
     {% if is_ranking_hidden %}
       <p>
