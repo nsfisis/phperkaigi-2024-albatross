@@ -22,7 +22,7 @@
   {% if answers|length == 0 %}
     {% if is_ranking_hidden %}
       <p>
-        回答が締め切られるまで、回答一覧は表示されません
+        回答一覧の公開は 3/9 18:30 です
       </p>
       <p>
         参加者の方で、ご自身の回答を確認する場合は、<a href="{{ url_for('login', {}, { to: url_for('answer_list', { qslug: quiz.slug }) }) }}">こちらからログインしてください</a>
