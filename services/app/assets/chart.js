@@ -31,6 +31,17 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
   const stats = apiResult.stats;
 
+  // Filter best scores.
+  for (const s of stats) {
+    const bestScores = [];
+    for (const score of s.scores) {
+      if (bestScores.length === 0 || bestScores[bestScores.length - 1].code_size > score.code_size) {
+        bestScores.push(score);
+      }
+    }
+    s.scores = bestScores;
+  }
+
   new Chart(
     chartCanvas,
     {
