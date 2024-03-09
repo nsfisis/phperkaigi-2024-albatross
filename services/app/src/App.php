@@ -287,6 +287,7 @@ final class App
             if ($currentUser === null) {
                 $answers = [];
             } else {
+                // An attendee can see their own answers even if the ranking is hidden.
                 $answers = $answerRepo->listByQuizIdAndAuthorId($quiz->quiz_id, $currentUser->user_id);
             }
         } else {
