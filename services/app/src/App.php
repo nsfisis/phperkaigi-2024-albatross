@@ -954,7 +954,9 @@ final class App
                 'error' => 'not_found',
             ])->withStatus(404);
         }
-        if ($quiz->isRankingHidden()) {
+        $currentUser = $this->getCurrentUser($request);
+        $isAdmin = $currentUser !== null ? $currentUser->is_admin : false;
+        if ($quiz->isRankingHidden() && !$isAdmin) {
             return $this->makeJsonResponse($response, [
                 'error' => 'forbidden',
             ])->withStatus(403);
