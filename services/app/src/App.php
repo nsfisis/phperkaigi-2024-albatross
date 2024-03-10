@@ -259,7 +259,7 @@ final class App
         if ($quiz->isRankingHidden()) {
             $ranking = null;
         } else {
-            $ranking = $answerRepo->getRanking($quiz->quiz_id, upto: 20);
+            $ranking = $answerRepo->getRankingByBestScores($quiz->quiz_id, upto: 20);
         }
 
         $currentUser = $this->getCurrentUser($request);
