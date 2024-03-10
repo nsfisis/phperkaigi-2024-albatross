@@ -256,13 +256,14 @@ final class App
         if ($quiz === null) {
             throw new HttpNotFoundException($request);
         }
+        $currentUser = $this->getCurrentUser($request);
+        $isAdmin = $currentUser !== null ? $currentUser->is_admin : false;
         if ($quiz->isRankingHidden()) {
             $ranking = null;
         } else {
-            $ranking = $answerRepo->getRankingByBestScores($quiz->quiz_id, upto: 20);
+            $ranking = $answerRepo->getRankingByBestScores($quiz->quiz_id, upto: 20, show_admin: $isAdmin);
         }
 
-        $currentUser = $this->getCurrentUser($request);
         return $this->render($request, $response, 'quiz_view.html.twig', [
             'page_title' => "問題 #{$quiz->quiz_id}",
             'quiz' => $quiz,
@@ -964,7 +965,7 @@ final class App
             ])->withStatus(403);
         }
 
-        $correctAnswers = $answerRepo->listAllCorrectAnswers($quiz->quiz_id);
+        $correctAnswers = $answerRepo->listAllCorrectAnswers($quiz->quiz_id, show_admin: $isAdmin);
 
         $stats = [];
         foreach ($correctAnswers as $answer) {
