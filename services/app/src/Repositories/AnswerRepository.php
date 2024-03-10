@@ -94,28 +94,10 @@ final class AnswerRepository
     }
 
     /**
-     * @param positive-int $upto
+     * @param ?positive-int $upto
      * @return Answer[]
      */
-    public function getRanking(int $quiz_id, int $upto): array
-    {
-        $result = $this->conn
-            ->query()
-            ->select('answers')
-            ->leftJoin('users', 'answers.author_id = users.user_id')
-            ->fields([...self::ANSWER_FIELDS, ...self::ANSWER_JOIN_USER_FIELDS])
-            ->where('quiz_id = :quiz_id AND execution_status = :execution_status')
-            ->orderBy([['code_size', 'ASC'], ['submitted_at', 'ASC']])
-            ->limit($upto)
-            ->execute(['quiz_id' => $quiz_id, 'execution_status' => AggregatedExecutionStatus::OK->toInt()]);
-        return array_map($this->mapRawRowToAnswer(...), $result);
-    }
-
-    /**
-     * @param positive-int $upto
-     * @return Answer[]
-     */
-    public function getRankingByBestScores(int $quiz_id, int $upto): array
+    public function getRankingByBestScores(int $quiz_id, ?int $upto): array
     {
         $q = $this->conn
             ->query()
@@ -128,7 +110,7 @@ final class AnswerRepository
             ])
             ->where('quiz_id = :quiz_id AND execution_status = :execution_status');
 
-        $result = $this->conn
+        $query = $this->conn
             ->query()
             ->select($q)
             ->fields([
@@ -137,8 +119,13 @@ final class AnswerRepository
                 'author_is_admin',
             ])
             ->where('r = 1')
-            ->orderBy([['code_size', 'ASC'], ['submitted_at', 'ASC']])
-            ->limit($upto)
+            ->orderBy([['code_size', 'ASC'], ['submitted_at', 'ASC']]);
+
+        if ($upto !== null) {
+            $query = $query->limit($upto);
+        }
+
+        $result = $query
             ->execute(['quiz_id' => $quiz_id, 'execution_status' => AggregatedExecutionStatus::OK->toInt()]);
         return array_map($this->mapRawRowToAnswer(...), $result);
     }

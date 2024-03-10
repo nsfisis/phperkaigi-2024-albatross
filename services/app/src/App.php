@@ -261,7 +261,7 @@ final class App
         if ($quiz->isRankingHidden()) {
             $ranking = null;
         } else {
-            $ranking = $answerRepo->getRankingByBestScores($quiz->quiz_id, upto: 20);
+            $ranking = $answerRepo->getRankingByBestScores($quiz->quiz_id, upto: null);
         }
 
         return $this->render($request, $response, 'quiz_view.html.twig', [
