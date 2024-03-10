@@ -38,17 +38,14 @@ final class AnswerRepository
     /**
      * @return Answer[]
      */
-    public function listByQuizId(int $quiz_id, bool $show_admin = false): array
+    public function listByQuizId(int $quiz_id): array
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields([...self::ANSWER_FIELDS, ...self::ANSWER_JOIN_USER_FIELDS])
-            ->where(
-                'quiz_id = :quiz_id'
-                . ($show_admin ? '' : ' AND users.is_admin = FALSE')
-            )
+            ->where('quiz_id = :quiz_id')
             ->orderBy([['execution_status', 'DESC'], ['code_size', 'ASC'], ['submitted_at', 'ASC']])
             ->execute(['quiz_id' => $quiz_id]);
         return array_map($this->mapRawRowToAnswer(...), $result);
@@ -100,17 +97,14 @@ final class AnswerRepository
      * @param positive-int $upto
      * @return Answer[]
      */
-    public function getRanking(int $quiz_id, int $upto, bool $show_admin = false): array
+    public function getRanking(int $quiz_id, int $upto): array
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields([...self::ANSWER_FIELDS, ...self::ANSWER_JOIN_USER_FIELDS])
-            ->where(
-                'quiz_id = :quiz_id AND execution_status = :execution_status'
-                . ($show_admin ? '' : ' AND users.is_admin = FALSE')
-            )
+            ->where('quiz_id = :quiz_id AND execution_status = :execution_status')
             ->orderBy([['code_size', 'ASC'], ['submitted_at', 'ASC']])
             ->limit($upto)
             ->execute(['quiz_id' => $quiz_id, 'execution_status' => AggregatedExecutionStatus::OK->toInt()]);
@@ -121,7 +115,7 @@ final class AnswerRepository
      * @param positive-int $upto
      * @return Answer[]
      */
-    public function getRankingByBestScores(int $quiz_id, int $upto, bool $show_admin = false): array
+    public function getRankingByBestScores(int $quiz_id, int $upto): array
     {
         $q = $this->conn
             ->query()
@@ -132,10 +126,7 @@ final class AnswerRepository
                 ...self::ANSWER_JOIN_USER_FIELDS,
                 'ROW_NUMBER() OVER(PARTITION BY answers.author_id ORDER BY answers.code_size ASC, answers.submitted_at ASC) AS r',
             ])
-            ->where(
-                'quiz_id = :quiz_id AND execution_status = :execution_status'
-                . ($show_admin ? '' : ' AND users.is_admin = FALSE')
-            );
+            ->where('quiz_id = :quiz_id AND execution_status = :execution_status');
 
         $result = $this->conn
             ->query()
@@ -152,17 +143,14 @@ final class AnswerRepository
         return array_map($this->mapRawRowToAnswer(...), $result);
     }
 
-    public function getBestCode(int $quiz_id, bool $show_admin = false): ?string
+    public function getBestCode(int $quiz_id): ?string
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields([...self::ANSWER_FIELDS, ...self::ANSWER_JOIN_USER_FIELDS])
-            ->where(
-                'quiz_id = :quiz_id AND execution_status = :execution_status'
-                . ($show_admin ? '' : ' AND users.is_admin = FALSE')
-            )
+            ->where('quiz_id = :quiz_id AND execution_status = :execution_status')
             ->orderBy([['code_size', 'ASC'], ['submitted_at', 'ASC']])
             ->first()
             ->execute(['quiz_id' => $quiz_id, 'execution_status' => AggregatedExecutionStatus::OK->toInt()]);
@@ -173,44 +161,39 @@ final class AnswerRepository
     /**
      * @return Answer[]
      */
-    public function listAllCorrectAnswers(int $quiz_id, bool $show_admin = false): array
+    public function listAllCorrectAnswers(int $quiz_id): array
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields([...self::ANSWER_FIELDS, ...self::ANSWER_JOIN_USER_FIELDS])
-            ->where(
-                'quiz_id = :quiz_id AND execution_status = :execution_status'
-                . ($show_admin ? '' : ' AND users.is_admin = FALSE')
-            )
+            ->where('quiz_id = :quiz_id AND execution_status = :execution_status')
             ->orderBy([['submitted_at', 'ASC']])
             ->execute(['quiz_id' => $quiz_id, 'execution_status' => AggregatedExecutionStatus::OK->toInt()]);
         return array_map($this->mapRawRowToAnswer(...), $result);
     }
 
-    public function countUniqueAuthors(bool $show_admin = false): int
+    public function countUniqueAuthors(): int
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields(['COUNT(DISTINCT author_id) AS count'])
-            ->where($show_admin ? '' : 'users.is_admin = FALSE')
             ->first()
             ->execute();
         assert(isset($result['count']));
         return (int) $result['count'];
     }
 
-    public function countAll(bool $show_admin = false): int
+    public function countAll(): int
     {
         $result = $this->conn
             ->query()
             ->select('answers')
             ->leftJoin('users', 'answers.author_id = users.user_id')
             ->fields(['COUNT(*) AS count'])
-            ->where($show_admin ? '' : 'users.is_admin = FALSE')
             ->first()
             ->execute();
         assert(isset($result['count']));

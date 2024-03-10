@@ -261,7 +261,7 @@ final class App
         if ($quiz->isRankingHidden()) {
             $ranking = null;
         } else {
-            $ranking = $answerRepo->getRankingByBestScores($quiz->quiz_id, upto: 20, show_admin: $isAdmin);
+            $ranking = $answerRepo->getRankingByBestScores($quiz->quiz_id, upto: 20);
         }
 
         return $this->render($request, $response, 'quiz_view.html.twig', [
@@ -567,7 +567,7 @@ final class App
         if ($quiz === null) {
             throw new HttpNotFoundException($request);
         }
-        $answers = $answerRepo->listByQuizId($quiz->quiz_id, show_admin: true);
+        $answers = $answerRepo->listByQuizId($quiz->quiz_id);
 
         return $this->render($request, $response, 'admin_answer_list.html.twig', [
             'page_title' => "管理画面 - 問題 #{$quiz->quiz_id} - 回答一覧",
@@ -965,7 +965,7 @@ final class App
             ])->withStatus(403);
         }
 
-        $correctAnswers = $answerRepo->listAllCorrectAnswers($quiz->quiz_id, show_admin: $isAdmin);
+        $correctAnswers = $answerRepo->listAllCorrectAnswers($quiz->quiz_id);
 
         $stats = [];
         foreach ($correctAnswers as $answer) {
