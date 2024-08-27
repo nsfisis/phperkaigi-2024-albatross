@@ -1,4 +1,4 @@
-DOCKER_COMPOSE := docker-compose -f docker-compose.prod.yml --env-file .env.prod
+DOCKER_COMPOSE := docker compose -f compose.prod.yaml --env-file .env.prod
 
 .PHONY: build
 build: build-assets

@@ -1,4 +1,4 @@
-DOCKER_COMPOSE := docker compose -f docker-compose.local.yml --env-file .env.local
+DOCKER_COMPOSE := docker compose -f compose.local.yaml --env-file .env.local
 
 .PHONY: up
 up:
