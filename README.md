@@ -9,6 +9,9 @@
 
 https://t.nil.ninja/phperkaigi/2024/golf/
 
+> [!NOTE]
+> 現在はアーカイブされた静的ファイルがサーブされています: https://github.com/nsfisis/phperkaigi-2024-albatross-archive
+
 
 ## おおまかな動作の仕組み
 
